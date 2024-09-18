@@ -9,16 +9,55 @@ public class PlayerMovement : MonoBehaviour
     private float jumpingPower = 8f;
     private bool isFacingRight = true;
 
+    public SpriteRenderer SpriteRenderer;
+
+    public Sprite Standing;
+    public Sprite Crouching;
+
+    public BoxCollider2D Collider;
+
+    public Vector2 StandingSize;
+    public Vector2 CrouchingSize;
+
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
 
+    public bool grounded;
+
+    private void Start()
+    {
+        Collider = GetComponent<BoxCollider2D>();
+        Collider.size = StandingSize;
+
+        SpriteRenderer= GetComponent<SpriteRenderer>();
+        SpriteRenderer.sprite = Standing;
+
+        StandingSize = Collider.size;
+    }
 
     // Update is called once per frame
     void Update()
     {
+
+        grounded = IsGrounded();
         horizontal = Input.GetAxisRaw("Horizontal");
 
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            SpriteRenderer.sprite = Crouching;
+            Collider.size = CrouchingSize;
+            speed = 5f;
+            jumpingPower = 0f;
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            SpriteRenderer.sprite = Standing;
+            Collider.size = StandingSize;
+            speed = 10f;
+            jumpingPower = 8f;
+        }
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
@@ -30,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         Flip();
+
     }
 
     private void FixedUpdate()
