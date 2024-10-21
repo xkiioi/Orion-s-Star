@@ -5,9 +5,10 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private float horizontal;
-    private float speed = 10f;
+    private float speed = 20f;
     private float jumpingPower = 8f;
     private bool isFacingRight = true;
+    public Animator anim;
 
     public SpriteRenderer SpriteRenderer;
 
@@ -67,6 +68,16 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
+
+        if (horizontal >= 0.1f || horizontal <= -0.1f)
+        {
+            anim.SetBool("isRunning", true);
+        }
+        else
+        {
+            anim.SetBool("isRunning", false);
+        }
+
 
         Flip();
 

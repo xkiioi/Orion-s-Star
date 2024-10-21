@@ -5,10 +5,20 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public string sceneName;
-    public void SceneChange()
+    public void start()
     {
-        //Load a scene
-        SceneManager.LoadScene(sceneName);
+        //Load the sect01 scene
+        SceneManager.LoadScene("Sect_01");
+    }
+
+    public void levels()
+    {
+        SceneManager.LoadScene("Levels");
+    }
+
+    public void quit()
+    {
+        Application.Quit();
+        Debug.Log("Quit");
     }
 }
