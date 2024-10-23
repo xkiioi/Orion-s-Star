@@ -17,12 +17,10 @@ public class PlayerMovement : MonoBehaviour
     public SpriteRenderer SpriteRenderer;
 
     public Sprite Standing;
-    public Sprite Crouching;
 
     public BoxCollider2D Collider;
 
     public Vector2 StandingSize;
-    public Vector2 CrouchingSize;
 
     //selecting the player's rigid body to justify groundCheck placement
     [SerializeField] private Rigidbody2D rb;
@@ -49,21 +47,6 @@ public class PlayerMovement : MonoBehaviour
         grounded = IsGrounded();
         horizontal = Input.GetAxisRaw("Horizontal");
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            SpriteRenderer.sprite = Crouching;
-            Collider.size = CrouchingSize;
-            speed = 5f;
-            jumpingPower = 0f;
-        }
-
-        if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            SpriteRenderer.sprite = Standing;
-            Collider.size = StandingSize;
-            speed = 10f;
-            jumpingPower = 5f;
-        }
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
