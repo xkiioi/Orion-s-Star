@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    // movement going from the x axis (left or right)
     private float horizontal;
+    // allows adjustment to player speed
     private float speed = 20f;
-    private float jumpingPower = 8f;
+    // adjustment to jumping boost for player
+    private float jumpingPower = 11f;
+    // a confirmation to determine if the player is facing right, otherwise facing left
     private bool isFacingRight = true;
     public Animator anim;
 
@@ -20,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 StandingSize;
     public Vector2 CrouchingSize;
 
+    //selecting the player's rigid body to justify groundCheck placement
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
@@ -37,10 +42,10 @@ public class PlayerMovement : MonoBehaviour
         StandingSize = Collider.size;
     }
 
-    // Update is called once per frame
     void Update()
     {
 
+        // definition for the player confirmed to be grounded (or not)
         grounded = IsGrounded();
         horizontal = Input.GetAxisRaw("Horizontal");
 
@@ -57,7 +62,7 @@ public class PlayerMovement : MonoBehaviour
             SpriteRenderer.sprite = Standing;
             Collider.size = StandingSize;
             speed = 10f;
-            jumpingPower = 8f;
+            jumpingPower = 5f;
         }
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
@@ -69,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
 
-        if (horizontal >= 0.1f || horizontal <= -0.1f)
+        if (horizontal != 0)
         {
             anim.SetBool("isRunning", true);
         }
@@ -77,6 +82,8 @@ public class PlayerMovement : MonoBehaviour
         {
             anim.SetBool("isRunning", false);
         }
+
+        anim.SetBool("isJumping", !IsGrounded());
 
 
         Flip();
@@ -92,6 +99,7 @@ public class PlayerMovement : MonoBehaviour
     {
         return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
     }
+
     private void Flip()
     {
         if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
